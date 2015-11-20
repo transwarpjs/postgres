@@ -53,6 +53,21 @@ export default {
   },
 
   insert(scope) {
+    const searcher = scope.searcher
+    scope.searcher.select('id')
+    const command = searcher._cmd.toUpperCase()
+    const table = searcher._modelName
+    const columns = searcher._selectionSet
+    const fieldSet = scope.searcher._fieldSet
+
+    const args = []
+    const values = []
+    const sql = `
+${command} INTO ${table}
+  ${dialect.insert(fieldSet, values, args)} VALUES
+  (${args.join(', ')})
+  ${dialect.returning(columns)}`.replace(/\n\s*/g, ' ').trim()
+
     return this.exec(scope.db.conn, sql, values).then(result => {
       return result.rows
     })
@@ -110,6 +125,21 @@ ${command} ${table}
   },
 
   delete(scope) {
+    const searcher = scope.searcher
+    const command = searcher._cmd.toUpperCase()
+    const table = searcher._modelName
+    const columns = searcher._selectionSet
+    const searchConditions = scope.searcher._whereConditions
+
+    const values = []
+    const sql = `
+${command} FROM ${table}
+  ${dialect.where(searchConditions, values)}
+  ${dialect.returning(columns, true)}`.replace(/\n\s*/g, ' ').trim()
+
+    return this.exec(scope.db.conn, sql, values).then(result => {
+      return result.rows
+    })
   },
 
   hasTable(scope) {

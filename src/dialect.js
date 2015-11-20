@@ -9,8 +9,9 @@ SELECT count(*)
 
   currentDatabaseSql: 'SELECT CURRENT_DATABASE()',
 
-  select(columns) {
+  select(columns, nostar) {
     const str = columns.join(', ')
+    if (nostar) return str
     return str || '*'
   },
 
@@ -26,8 +27,12 @@ SELECT count(*)
     var i = arr.length
     const str = conditions.map(c => {
       const { column, operator, value } = c
-      arr.push(value)
-      return `${column} ${operator} $${++i}`
+      if (operator === 'in') {
+        arr.push(`(${value})`)
+      } else {
+        arr.push(value)
+      }
+      return `${column} ${operator.toUpperCase()} $${++i}`
     })
     return str.length ? ` WHERE ${str}` : ''
   },
@@ -45,8 +50,8 @@ SELECT count(*)
     return str.length ? ` ORDER BY ${str}` : ''
   },
 
-  returning(columns) {
-    const str = this.select(columns)
+  returning(columns, nostar) {
+    const str = this.select(columns, nostar)
     return str.length ? ` RETURNING ${str}` : ''
   },
 
@@ -58,6 +63,17 @@ SELECT count(*)
       return `${k} = $${++i}`
     }).join(', ')
     return str
+  },
+
+  insert(columns, arr, args) {
+    var i = arr.length
+    const keys = Object.keys(columns)
+    const str = keys.map(k => {
+      arr.push(columns[k])
+      args.push(`$${++i}`)
+      return k
+    }).join(', ')
+    return str.length ? `(${str})` : ''
   }
 
 }
