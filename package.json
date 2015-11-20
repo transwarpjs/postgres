@@ -1,21 +1,21 @@
 {
-  "name": "transwarp-postgresql",
-  "version": "1.0.0",
-  "description": "",
+  "name": "transwarp-postgres",
+  "version": "0.0.1",
+  "description": "PostgreSQL for Transwarp",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": ""
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Fangdun Cai <cfddream@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "pg": "^4.4.3",
     "pg-native": "^1.9.0"
   },
   "devDependencies": {
-    "babel-plugin-transform-es2015-destructuring": "^6.0.18",
+    "babel-plugin-transform-es2015-destructuring": "^6.1.18",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.2.0",
-    "babel-plugin-transform-es2015-parameters": "^6.0.18",
+    "babel-plugin-transform-es2015-parameters": "^6.1.18",
     "babel-preset-stage-1": "^6.1.18"
   },
   "babel": {
