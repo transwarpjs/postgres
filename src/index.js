@@ -1,5 +1,6 @@
 'use strict'
 
+import os from 'os'
 import _pg from 'pg'
 import dialect from './dialect'
 
@@ -62,11 +63,11 @@ export default {
 
     const args = []
     const values = []
-    const sql = `
+    const sql = this.formatSql(`
 ${command} INTO ${table}
   ${dialect.insert(fieldSet, values, args)} VALUES
   (${args.join(', ')})
-  ${dialect.returning(columns)}`.replace(/\n\s*/g, ' ').trim()
+  ${dialect.returning(columns)}`)
 
     return this.exec(scope.db.conn, sql, values).then(result => {
       return result.rows
@@ -85,14 +86,14 @@ ${command} INTO ${table}
     const skip = scope.searcher._skip
 
     const values = []
-    const sql = `
+    const sql = this.formatSql(`
 ${command} ${dialect.select(columns)}
   FROM ${table}
   ${dialect.where(searchConditions, values)}
   ${dialect.sort(orders)}
   ${dialect.group(groups)}
   ${dialect.limit(limit)}
-  ${dialect.skip(skip)}`.replace(/\n\s*/g, ' ').trim()
+  ${dialect.skip(skip)}`)
 
     return this.exec(scope.db.conn, sql, values).then(result => {
       return result.rows
@@ -113,11 +114,11 @@ ${command} ${dialect.select(columns)}
     searcher.where('id', scope.value.get('id'))
     const updateColumns = scope.searcher._updateColumns
     const values = []
-    const sql = `
+    const sql = this.formatSql(`
 ${command} ${table}
   SET ${dialect.set(updateColumns, values)}
   ${dialect.where(searchConditions, values)}
-  ${dialect.returning(columns)}`.replace(/\n\s*/g, ' ').trim()
+  ${dialect.returning(columns)}`)
 
     return this.exec(scope.db.conn, sql, values).then(result => {
       return result
@@ -132,10 +133,10 @@ ${command} ${table}
     const searchConditions = scope.searcher._whereConditions
 
     const values = []
-    const sql = `
+    const sql = this.formatSql(`
 ${command} FROM ${table}
   ${dialect.where(searchConditions, values)}
-  ${dialect.returning(columns, true)}`.replace(/\n\s*/g, ' ').trim()
+  ${dialect.returning(columns, true)}`)
 
     return this.exec(scope.db.conn, sql, values).then(result => {
       return result.rows
@@ -155,6 +156,11 @@ ${command} FROM ${table}
     .then(result => {
       return result.rows[0]
     })
+  },
+
+  formatSql: (sql) {
+    const r = new RegExp(`${os.EOL}\\s*`, 'g')
+    return sql.replace(r, ' ').trim()
   }
 
 }
