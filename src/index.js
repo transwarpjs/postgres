@@ -158,7 +158,7 @@ ${command} FROM ${table}
     })
   },
 
-  formatSql: (sql) {
+  formatSql(sql) {
     const r = new RegExp(`${os.EOL}\\s*`, 'g')
     return sql.replace(r, ' ').trim()
   }
