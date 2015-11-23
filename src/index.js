@@ -56,7 +56,7 @@ export default {
   insert(scope) {
     const searcher = scope.searcher
     scope.searcher.select('id')
-    const command = searcher._cmd.toUpperCase()
+    const command = searcher.cmd
     const table = searcher._modelName
     const columns = searcher._selectionSet
     const fieldSet = scope.searcher._fieldSet
@@ -107,7 +107,7 @@ ${command} ${dialect.select(columns)}
 
   update(scope) {
     const searcher = scope.searcher
-    const command = searcher._cmd.toUpperCase()
+    const command = searcher.cmd
     const table = searcher._modelName
     const columns = searcher._selectionSet
     const searchConditions = scope.searcher._whereConditions
@@ -127,7 +127,7 @@ ${command} ${table}
 
   delete(scope) {
     const searcher = scope.searcher
-    const command = searcher._cmd.toUpperCase()
+    const command = searcher.cmd
     const table = searcher._modelName
     const columns = searcher._selectionSet
     const searchConditions = scope.searcher._whereConditions
