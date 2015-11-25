@@ -57,7 +57,7 @@ export default {
     const searcher = scope.searcher
     scope.searcher.select('id')
     const command = searcher.cmd
-    const table = searcher._modelName
+    const table = searcher.modelName
     const columns = searcher._selectionSet
     const fieldSet = scope.searcher._fieldSet
 
@@ -76,7 +76,7 @@ ${command} INTO ${table}
 
   find(scope) {
     const searcher = scope.searcher
-    const table = searcher._modelName
+    const table = searcher.modelName
     const command = 'SELECT'
     const columns = searcher._selectionSet
     const searchConditions = scope.searcher._whereConditions
@@ -108,7 +108,7 @@ ${command} ${dialect.select(columns)}
   update(scope) {
     const searcher = scope.searcher
     const command = searcher.cmd
-    const table = searcher._modelName
+    const table = searcher.modelName
     const columns = searcher._selectionSet
     const searchConditions = scope.searcher._whereConditions
     searcher.where('id', scope.value.get('id'))
@@ -128,7 +128,7 @@ ${command} ${table}
   delete(scope) {
     const searcher = scope.searcher
     const command = searcher.cmd
-    const table = searcher._modelName
+    const table = searcher.modelName
     const columns = searcher._selectionSet
     const searchConditions = scope.searcher._whereConditions
 
@@ -144,7 +144,7 @@ ${command} FROM ${table}
   },
 
   hasTable(scope) {
-    const table = scope.search._modelName
+    const table = scope.search.modelName
     return this.exec(scope.db.conn, dialect.hasTableSql, [table])
     .then(result => {
       return result.rowCount > 0
