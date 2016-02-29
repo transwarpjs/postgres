@@ -15,7 +15,7 @@
   "devDependencies": {
     "babel-plugin-transform-es2015-destructuring": "^6.1.18",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.x",
-    "babel-plugin-transform-es2015-parameters": "^6.1.18",
+    "babel-plugin-transform-es2015-parameters": "^6.6.0",
     "babel-preset-stage-1": "^6.x"
   },
   "babel": {
